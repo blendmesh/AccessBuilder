@@ -1,0 +1,113 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "AccessBuilder"
+version = "1.1.1"
+description = "Gerenciador reutilizável de clientes AWS com suporte a múltiplas estratégias de autenticação"
+readme = "README.md"
+requires-python = ">=3.7"
+license = { text = "MIT" }
+authors = [
+    {name = "Blendmesh"}
+]
+keywords = [
+    "aws",
+    "boto3",
+    "s3",
+    "athena",
+    "credentials",
+    "iam",
+    "factory-pattern",
+    "session-management"
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "boto3>=1.17.0,<2.0.0",
+    "botocore>=1.20.0,<2.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+    "pytest-cov>=2.0",
+    "moto>=2.0",
+    "black>=21.0",
+    "flake8>=3.9",
+    "mypy>=0.9",
+]
+
+[project.urls]
+Homepage = "https://github.com/blendmesh/AccessBuilder"
+Repository = "https://github.com/blendmesh/AccessBuilder"
+Issues = "https://github.com/blendmesh/AccessBuilder/issues"
+Documentation = "https://github.com/blendmesh/AccessBuilder#usage"
+
+[tool.setuptools]
+zip-safe = false
+
+[tool.setuptools.packages.find]
+where = ["src"] 
+include = ["AccessBuilder*"]
+exclude = ["tests", "docs", "examples"]
+
+[tool.black]
+line-length = 88
+target-version = ['py37']
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+line_length = 88
+skip_gitignore = true
+
+[tool.mypy]
+python_version = "3.7"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+check_untyped_defs = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --strict-markers --tb=short"
+
+markers = [
+    "live: requer credenciais AWS reais no ambiente (AWS_ACCESS_KEY_ID + AWS_SECRET_ACCESS_KEY)",
+    "ec2_role: requer EC2 IAM Instance Profile (pool EC2 self-hosted, EC2_ROLE_AVAILABLE=true)",
+    "ecs_role: requer ECS Task Role (pool ECS Fargate self-hosted, ECS_ROLE_AVAILABLE=true)",
+    "sso: requer perfil SSO configurado e aws sso login executado (SSO_PROFILE_NAME definido)",
+    "cross_acct: requer CROSS_ACCOUNT_ROLE_ARN definido",
+]
+
+[tool.coverage.run]
+source = ["AccessBuilder"]
+branch = true
+omit = ["*/tests/*", "*/examples/*", "setup.py"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 60
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]

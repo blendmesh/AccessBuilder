@@ -1,0 +1,18 @@
+# Include license and readme
+include LICENSE
+include README.md
+
+# Include type hints
+include py.typed
+
+# Exclude test files from distribution
+exclude tests/
+exclude docs/
+exclude examples/
+
+# Exclude version control
+exclude .git/
+exclude .gitignore
+
+# Recursive include docs
+#recursive-include docs *
